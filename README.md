@@ -99,7 +99,8 @@ before moving to Wayland. They worked fine in isolation but the feature
 sets were needed for complex interfaces (videogames and dense UIs like
 Godot).
 
-Panoramic zoom: MacOS zoom and [https://github.com/tsoding/boomer].
+Panoramic zoom: MacOS zoom and
+[boomer](https://github.com/tsoding/boomer).
 
 Scope zoom: [xzoom](https://tracker.debian.org/pkg/xzoom) (or
 [xzoom ftp](ftp://sunsite.unc.edu/pub/linux/libs/X/), and later
