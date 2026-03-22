@@ -31,25 +31,25 @@ Reference of the internal data structure:
 
 ```c
 enum wlzoomshape {
-  WLZ_SQUARE,
-  WLZ_CIRCLE,
+  WLZ_RECTANGLE,
+  WLZ_ELLIPSE,
 };
 
 enum wlzoomarea {
   unsigned float scale = 1.5;
-  wlzoomshape shape = WLZ_SQUARE;
-  float x = 0.0; // original square top-left position
+  wlzoomshape shape = WLZ_RECTANGLE;
+  float x = 0.0; // original rectangle top-left position
   float y = 0.0;
-  float w = 0.0; // original square size
+  float w = 0.0; // original rectangle size
   float h = 0.0;
-  float dx = 0.0; // destination square top-left position
+  float dx = 0.0; // destination rectangle top-left position
   float dy = 0.0;
 };
 
-// WLZ_CIRCLE
-// x, y    original circle center position from screen top-left
+// WLZ_ELLIPSE
+// x, y    original ellipse center position from screen top-left
 // h, w    radius in pixels, as total% ex. 270 pixels for 1080p
-// dx, dy  destination circle center position from screen top-left
+// dx, dy  destination ellipse center position from screen top-left
 
 struct wlzoom {
   float pan_scale = 1.0;
@@ -96,6 +96,77 @@ Proposed implementation path:
 
 Waiting for reference implementations and user reports to validate data
 model.
+
+## Shadertoy versions
+
+Because code is better than words...
+
+### Rectangle
+
+Note: In Shadertoy, (0,0) is bottom left.
+
+```
+void mainImage(out vec4 fragColor, in vec2 fragCoord)
+{
+  float scale = 1.5;
+  float x = iMouse.x;
+  float y = iMouse.y;
+  float w = 200.0;
+  float h = 150.0;
+  float dx = 400.0;
+  float dy = 300.0;
+
+  vec2 srcPos  = vec2(x, y);
+  vec2 srcSize = vec2(w, h);
+  vec2 dstPos  = vec2(dx, dy);
+  vec2 dstSize = srcSize * scale;
+
+  vec2 local = fragCoord - dstPos;
+  if (local.x >= 0.0 && local.y >= 0.0 &&
+    local.x <= dstSize.x && local.y <= dstSize.y)
+  {
+    vec2 srcPixel = srcPos + (local / scale);
+    vec2 srcUV = srcPixel / iResolution.xy;
+    fragColor = texture(iChannel0, srcUV);
+  } else {
+    fragColor = texture(iChannel0, fragCoord / iResolution.xy);
+  }
+}
+```
+
+### Ellipse
+
+```
+void mainImage(out vec4 fragColor, in vec2 fragCoord)
+{
+  float scale = 1.5;
+  float x = iMouse.x;
+  float y = iMouse.y;
+  float w = 70.0;
+  float h = 60.0;
+  float dx = 200.0;
+  float dy = 200.0;
+
+  vec2 radius = vec2(w, h);
+  vec2 mg_center = vec2(x, y);
+
+  vec2 pixelCoord = fragCoord;
+  vec2 uv = pixelCoord / iResolution.xy;
+
+  vec2 d = pixelCoord - mg_center;
+  float ellipseDist = dot(d * d, 1.0 / (radius * radius));
+  if (ellipseDist < 1.0)
+  {
+    vec2 centered_coords = pixelCoord - mg_center;
+    vec2 magnified_coords = centered_coords / scale;
+    vec2 new_pixelCoord = magnified_coords + mg_center;
+    vec2 new_uv = new_pixelCoord / iResolution.xy;
+    fragColor = texture(iChannel0, new_uv);
+  } else {
+    fragColor = texture(iChannel0, uv);
+  }
+}
+```
 
 ## Origins and acknowledgments
 
