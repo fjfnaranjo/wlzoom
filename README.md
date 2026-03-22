@@ -89,8 +89,8 @@ Proposed implementation path:
 
 ## Wayland control protocol
 
-Waiting for reference implementations and user report data to validate
-data model.
+Waiting for reference implementations and user reports to validate data
+model.
 
 ## Origins and acknowledgments
 
