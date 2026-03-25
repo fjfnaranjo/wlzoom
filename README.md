@@ -45,6 +45,17 @@ original or their zoomed area, and disabled when it leaves one of them.
 ¹ Control methods that involve following the cursor have the option to
 stop following on demand.
 
+The different zooms are combined in a reverse order.
+
+First, the regional zooms are applied. If multiple regional zoomed areas
+overlap, the one that was defined the last shows on top of the other
+ones, replacing the content without extra amplification.
+
+Then, the scope zoom is applied over the existing zoomed regions,
+providing further amplification.
+
+Finally, the panoramic zoom acts over the whole display.
+
 ## Control protocols
 
 Waiting for reference implementations and user reports to validate data
