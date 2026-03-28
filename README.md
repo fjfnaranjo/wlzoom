@@ -68,6 +68,15 @@ Some details already established:
 * The protocol supports configuring the positions and scale factors
 using values relative to the total display size.
 
+### Focus zoom case
+
+A special region, the "focus region", can be used by applications and UI
+toolkit libraries to zoom over widgets and other UI elements when they
+have the interface focus or the user moves the cursor over them. This is
+just a proposed name for the concept, the actual implementation will
+use a regular region, but the protocol will have into consideration this
+use case.
+
 ## Reference implementations
 
 ### Data model
