@@ -223,7 +223,7 @@ X11 compositor with support for shaders.
 - Expand configuration to allow region configuration.
 - Build a shader to apply the zooms.
 - Validate performance and coverage implications.
-- Test the implementation of a D-BUS control protocol.
+- Test the implementation of a protocol using a control socket.
 
 ## Origins and acknowledgments
 
