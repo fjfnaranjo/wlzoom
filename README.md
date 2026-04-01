@@ -37,12 +37,18 @@ the original content. It snaps to the edges of the display.
 * Scope zoom: zooms-in a region of the display, taking the space around
 it and following the cursor¹.
 
-* Regional zoom: zooms specific regions of the display, by taking the
-space around them. They can be enabled independently. They can also be
-enabled by checking if the cursor position collides with either their
-original or their zoomed area, and disabled when it leaves one of them.
-Finally, they can be set as ephemeral, to self-destroy on the next event
-that disables them.
+* Regional zoom: zooms specific regions in the display by taking the
+space around them. The zooms in this regions can be enabled (expanded)
+independently from each other:
+  * Regions define two areas: the inner and the outer area. The inner
+  area surrounds the content that needs the zoom and the outer area is
+  the space where the zoomed content is going to be displayed.
+  * Regions can be configured to expand depending on the cursor entering
+  or leaving the inner and outer areas.
+  * If the outer area cannot contain the zoomed content, its content
+  will pan following the cursor.
+  * Regions can also be ephemeral. In this case, they will self-destroy
+  after the next event that contracts them.
 
 ¹ Control methods that involve following the cursor have the option to
 stop following on demand.
@@ -132,6 +138,8 @@ struct dezoomregion {
   bool ephemeral = false;
   dezoomexpand expand = DEZOOM_ORIGIN;
   dezoomarea area;
+  float dw = 0.0; // override for the destination area size
+  float dh = 0.0;
 };
 
 struct dezoom {
